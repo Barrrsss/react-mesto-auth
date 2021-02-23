@@ -1,0 +1,22 @@
+.element__button-like {
+  width: 25px;
+  height: 22px;
+  background-image: url("../../../images/elements-like.svg");
+  box-sizing: border-box;
+  border: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0;
+}
+.element__button-like:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 680px) {
+  .element__button-like {
+    margin-top: 9px;
+    margin-left: 10px;
+  }
+}

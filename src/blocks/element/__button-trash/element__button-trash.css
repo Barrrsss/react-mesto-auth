@@ -1,0 +1,26 @@
+.element__button-trash {
+  display: none;
+  width: 18px;
+  height: 19px;
+  background-image: url("../../../images/trash-icon.svg");
+  box-sizing: border-box;
+  border: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0;
+  position: absolute;
+  right: 15px;
+  top: 18px;
+}
+.element__button-trash:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 680px) {
+  .element__button-trash {
+    margin-top: 9px;
+    margin-left: 10px;
+  }
+}

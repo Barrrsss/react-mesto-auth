@@ -1,0 +1,9 @@
+.element__name-place {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 246px;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+
+}

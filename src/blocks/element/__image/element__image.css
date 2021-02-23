@@ -1,0 +1,13 @@
+.element__image {
+  display: block;
+  width: 282px;
+  height: 282px;
+  border-radius: 10px 10px 0px 0px;
+  object-fit: cover;
+}
+
+.element__image:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transform: scale(1.005);
+  cursor: pointer;
+}

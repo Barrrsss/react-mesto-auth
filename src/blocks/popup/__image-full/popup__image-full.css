@@ -1,0 +1,9 @@
+.popup__image-full {
+  min-width: auto;
+  min-height: auto;
+  max-width: 75vw;
+  max-height: 75vh;
+  object-fit: contain;
+  object-position: center;
+  display: inline-block;
+}
