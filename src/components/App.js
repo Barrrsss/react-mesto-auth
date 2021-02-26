@@ -1,4 +1,5 @@
 import React from 'react'
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import {useState, useEffect} from 'react'
 import Header from './Header'
 import Main from './Main'
@@ -10,6 +11,7 @@ import {UserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
+import * as auth from '../utils/auth.js';
 
 function App() {
     const [currentUser, setCurrentUser] = useState({
@@ -17,20 +19,48 @@ function App() {
         about: '',
         avatar: ''
     });
+    const initialData = {
+        username: '',
+        email: ''
+    }
+    //авторизация
+    const [loggedIn, setLoggedIn] = React.useState(false);
+    const [data, setData] = React.useState(initialData);
+    const history = useHistory();
 
     const [cards, setCards] = useState([]);
     //получаем информацию о карточках и пользователе
     useEffect(() => {
-        api.getAllData()
-            .then((response => {
-                const [userData, cardsData] = response;
-                setCards(cardsData);
-                setCurrentUser(userData);
-            }))
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [])
+        if(loggedIn) {
+            api.getAllData()
+                .then((response => {
+                    const [userData, cardsData] = response;
+                    setCards(cardsData);
+                    setCurrentUser(userData);
+                }))
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+
+    }, [loggedIn])
+
+    // Метод обработки логина
+    const handleLogin = ({ username, password }) => {
+        return auth.authorize(username, password).then(res => {
+            // Секция для обработки ошибок запроса
+            if (!res || res.statusCode === 400) throw new Error('Что-то пошло не так');
+            if (res.jwt) {
+                setLoggedIn(true);
+                setData({
+                    username: res.user.username,
+                    email: res.user.email,
+                })
+                // Записываем полученный jwt токен в локальное хранилище
+                localStorage.setItem('jwt', res.jwt);
+            };
+        });
+    }
     //функционал для открытия и закрытия попапов
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
@@ -135,6 +165,8 @@ function App() {
                 console.log(err);
             });
     }
+
+    //обращение к апи
 
     return (
         <UserContext.Provider value={currentUser}>
