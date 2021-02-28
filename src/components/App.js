@@ -11,7 +11,11 @@ import {UserContext} from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
-import * as auth from '../utils/auth.js';
+import * as auth from '../utils/auth';
+import ProtectedRoute from './ProtectedRoute';
+import Login from './Login';
+import Register from './Register';
+
 
 function App() {
     const [currentUser, setCurrentUser] = useState({
@@ -19,15 +23,18 @@ function App() {
         about: '',
         avatar: ''
     });
-    const initialData = {
-        username: '',
-        email: ''
-    }
+    //попапы
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+
+
     //авторизация
-    const [loggedIn, setLoggedIn] = React.useState(false);
-    const [data, setData] = React.useState(initialData);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const[email, setEmail] = useState('');
     const history = useHistory();
 
+    const [selectedCard, setSelectedCard] = useState(false);
     const [cards, setCards] = useState([]);
     //получаем информацию о карточках и пользователе
     useEffect(() => {
@@ -45,47 +52,79 @@ function App() {
 
     }, [loggedIn])
 
-    // Метод обработки логина
-    const handleLogin = ({ username, password }) => {
-        return auth.authorize(username, password).then(res => {
-            // Секция для обработки ошибок запроса
-            if (!res || res.statusCode === 400) throw new Error('Что-то пошло не так');
-            if (res.jwt) {
-                setLoggedIn(true);
-                setData({
-                    username: res.user.username,
-                    email: res.user.email,
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token){
+            auth.getContent(token)
+                .then(data => {
+                    if(data){
+                        setEmail(data.data.email);
+                        handleLoggedIn();
+                        history.push('/');
+                    }
                 })
-                // Записываем полученный jwt токен в локальное хранилище
-                localStorage.setItem('jwt', res.jwt);
-            };
-        });
+        }
+    }, [history]);
+
+
+    //обработчик регистрации пользователя
+    function handleRegister(password, email){
+        auth.register(password, email)
+            .then(data => {
+                if(data){
+                    // handleInfoTooltip(true);
+                    history.push('/sign-in');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                // handleInfoTooltip(false);
+            })
+    }
+
+    //обработчик авторизации пользователя
+    function handleLogin (password, email) {
+        auth.authorize(password, email)
+            .then(data => {
+                if(data.token){
+                    setEmail(email);
+                    handleLoggedIn();
+                    localStorage.setItem('token', data.token);
+                    history.push('/');
+                }
+            })
+            .catch(err => {
+                // handleInfoTooltip(false);
+                console.log(err);
+            })
+    }
+
+    //обработчик выхода пользователя
+    function handleSignOut() {
+        localStorage.removeItem('token');
+        setLoggedIn(false);
+        setEmail('');
+        history.push('/sign-in');
+    }
+
+    function handleLoggedIn() {
+        setLoggedIn(!loggedIn);
     }
     //функционал для открытия и закрытия попапов
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
         console.log(currentUser)
     }
 
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
 
     function handleAddPlaceClick() {
         setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
     }
 
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     }
-    const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
-
-    function handleDeleteCardClick() {
-        setIsDeleteCardPopupOpen(!isDeleteCardPopupOpen);
-    }
-    const [selectedCard, setSelectedCard] = useState(false);
 
     function handleCardClick(card) {
         setSelectedCard(card);
@@ -95,7 +134,6 @@ function App() {
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
         setIsEditAvatarPopupOpen(false);
-        setIsDeleteCardPopupOpen(false);
         setSelectedCard(false);
     }
 
@@ -172,11 +210,22 @@ function App() {
         <UserContext.Provider value={currentUser}>
             <div className="body" onKeyDown={onKeyPressed} tabIndex="0">
                 <div className="page">
+                    <Header email={email} onSignOut={handleSignOut} />
+                    <Switch>
+                        <Route exact path="/">
+                            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+                            <ProtectedRoute exact path="/" loggedIn={loggedIn} component={Main} onEditProfile={handleEditProfileClick}
+                                            onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}
+                                            cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
 
-                    <Header/>
-                    <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
-                          onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}
-                          cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>
+                        </Route>
+                        <Route path="/sign-up">
+                            <Register handleRegister={handleRegister} />
+                        </Route>
+                        <Route path="/sign-in">
+                            <Login handleLogin={handleLogin} />
+                        </Route>
+                    </Switch>
                     <Footer/>
 
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
