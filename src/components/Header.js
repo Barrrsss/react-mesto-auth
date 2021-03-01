@@ -1,8 +1,8 @@
 import mestoLogo from "../images/header-logo.svg";
-import React, { useState } from 'react';
-import { Link, Route } from 'react-router-dom';
+import React from 'react';
+import {Link, Route} from 'react-router-dom';
 
-function Header({ email, onSignOut }) {
+function Header({email, onSignOut}) {
     return (
         <header className="header">
             <img className="header__logo" src={mestoLogo} alt="Логотип место"/>

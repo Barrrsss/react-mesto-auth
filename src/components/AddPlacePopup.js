@@ -23,7 +23,7 @@ export default function AddPlacePopup (props) {
     }
     return (
         <PopupWithForm id="popupAdd" title='Новое место' name='add-card' isOpen={props.isOpen}
-                       onClose={props.onClose} onSubmit={handleSubmit} button = 'Сохранить'>
+                       onClose={props.onClose} onSubmit={handleSubmit} button = 'Сохранить' onPopupOverlayClose={props.onPopupOverlayClose}>
             <input id="placeField" className="popup__field popup__field_add-card popup__field_place" type="text"
                    name="name" ref={nameRef}
                    placeholder="Название" minLength="2" maxLength="30" required/>

@@ -1,8 +1,8 @@
 import React from 'react';
 import {useState} from 'react'
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
-export default function Register({ handleRegister }) {
+export default function Register({handleRegister}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
