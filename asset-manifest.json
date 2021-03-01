@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Barrrsss/react-mesto-auth/static/css/main.f1d0959c.chunk.css",
+    "main.js": "/Barrrsss/react-mesto-auth/static/js/main.d9bc63c6.chunk.js",
+    "main.js.map": "/Barrrsss/react-mesto-auth/static/js/main.d9bc63c6.chunk.js.map",
+    "runtime-main.js": "/Barrrsss/react-mesto-auth/static/js/runtime-main.572e08a8.js",
+    "runtime-main.js.map": "/Barrrsss/react-mesto-auth/static/js/runtime-main.572e08a8.js.map",
+    "static/js/2.a78938dd.chunk.js": "/Barrrsss/react-mesto-auth/static/js/2.a78938dd.chunk.js",
+    "static/js/2.a78938dd.chunk.js.map": "/Barrrsss/react-mesto-auth/static/js/2.a78938dd.chunk.js.map",
+    "static/js/3.c9064e9b.chunk.js": "/Barrrsss/react-mesto-auth/static/js/3.c9064e9b.chunk.js",
+    "static/js/3.c9064e9b.chunk.js.map": "/Barrrsss/react-mesto-auth/static/js/3.c9064e9b.chunk.js.map",
+    "index.html": "/Barrrsss/react-mesto-auth/index.html",
+    "static/css/main.f1d0959c.chunk.css.map": "/Barrrsss/react-mesto-auth/static/css/main.f1d0959c.chunk.css.map",
+    "static/js/2.a78938dd.chunk.js.LICENSE.txt": "/Barrrsss/react-mesto-auth/static/js/2.a78938dd.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/Barrrsss/react-mesto-auth/static/media/trash-icon.2af49b82.svg",
+    "static/media/fail.d4ce2a26.svg": "/Barrrsss/react-mesto-auth/static/media/fail.d4ce2a26.svg",
+    "static/media/header-logo.c2821b38.svg": "/Barrrsss/react-mesto-auth/static/media/header-logo.c2821b38.svg",
+    "static/media/sucess.a9eb6caf.svg": "/Barrrsss/react-mesto-auth/static/media/sucess.a9eb6caf.svg",
+    "static/media/update-avatar.ae1a976d.svg": "/Barrrsss/react-mesto-auth/static/media/update-avatar.ae1a976d.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.572e08a8.js",
+    "static/js/2.a78938dd.chunk.js",
+    "static/css/main.f1d0959c.chunk.css",
+    "static/js/main.d9bc63c6.chunk.js"
+  ]
+}
