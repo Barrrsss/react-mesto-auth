@@ -14,8 +14,6 @@ import AddPlacePopup from './AddPlacePopup'
 import * as auth from '../utils/auth';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
-import sucess from '../images/sucess.svg';
-import fail from '../images/fail.svg';
 import Login from './Login';
 import Register from './Register';
 
@@ -32,9 +30,8 @@ function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-    const [isSuccessTooltipOpen, setIsSuccessTooltipOpen] = useState(false);
-    const [isFailTooltipOpen, setIsFailTooltipOpen] = useState(false);
-
+    const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+    const [isSucessTooltip, setIsSucessTooltip] = useState(false);
     //авторизация
     const [loggedIn, setLoggedIn] = useState(false);
     const [email, setEmail] = useState('');
@@ -70,6 +67,9 @@ function App() {
                         history.push('/');
                     }
                 })
+                .catch(err => {
+                    console.log(err);
+                })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [history]);
@@ -86,17 +86,19 @@ function App() {
         auth.register(password, email)
             .then(data => {
                 if (data) {
-                    setIsSuccessTooltipOpen(true);
+                    setIsTooltipOpen(true);
+                    setIsSucessTooltip(true);
                     setTimeout(() =>
-                        setIsSuccessTooltipOpen(false), 2000);
+                        setIsTooltipOpen(false), 2000);
                     history.push('/sign-in');
                 }
             })
             .catch(err => {
                 console.log(err);
-                setIsFailTooltipOpen(true)
+                setIsTooltipOpen(true);
+                setIsSucessTooltip(false);
                 setTimeout(() =>
-                    setIsFailTooltipOpen(false), 2000);
+                    setIsTooltipOpen(false), 2000);
             })
     }
 
@@ -116,9 +118,10 @@ function App() {
                 }
             })
             .catch(err => {
-                setIsFailTooltipOpen(true)
+                setIsTooltipOpen(true);
+                setIsSucessTooltip(false);
                 setTimeout(() =>
-                    setIsFailTooltipOpen(false), 2000);
+                    setIsTooltipOpen(false), 2000);
                 console.log(err);
             })
     }
@@ -157,8 +160,7 @@ function App() {
         setIsAddPlacePopupOpen(false);
         setIsEditAvatarPopupOpen(false);
         setSelectedCard(false);
-        setIsSuccessTooltipOpen(false);
-        setIsFailTooltipOpen(false);
+        setIsTooltipOpen(false);
     }
 
     //закрытие по esc
@@ -247,8 +249,8 @@ function App() {
                                             onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
                                             onCardClick={handleCardClick}
                                             cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>
-
                         </Route>
+
                         <Route path="/sign-up">
                             <Register handleRegister={handleRegister}/>
                         </Route>
@@ -269,9 +271,7 @@ function App() {
                     <ImagePopup id='popupImage' card={selectedCard} onClose={closeAllPopups}
                                 onPopupOverlayClose={handleOverlayClose}/>
 
-                    <InfoTooltip title="Вы успешно зарегистрировались!" src={sucess} isOpen={isSuccessTooltipOpen}
-                                 onClose={closeAllPopups} onPopupOverlayClose={handleOverlayClose}/>
-                    <InfoTooltip title="Что-то пошло не так! Попробуйте ещё раз." src={fail} isOpen={isFailTooltipOpen}
+                    <InfoTooltip isTooltipStatus={isSucessTooltip}  isOpen={isTooltipOpen}
                                  onClose={closeAllPopups} onPopupOverlayClose={handleOverlayClose}/>
                 </div>
             </div>
